@@ -61,6 +61,23 @@
             text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
         }
 
+        nav {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--accent-glow);
+        }
+
         /* Hero Section */
         .hero {
             display: flex;
@@ -188,6 +205,9 @@
             .hero-image {
                 margin-top: 3rem;
             }
+            nav {
+                display: none; /* Oculta o menu simples em telas pequenas (pode ser adaptado para um menu sanduíche se necessário) */
+            }
         }
     </style>
 </head>
@@ -204,13 +224,17 @@
             </svg>
             ZIUL<span>BOT</span>
         </a>
+        <nav>
+            <a href="#" class="nav-link">Início</a>
+            <a href="kick-bot.html" class="nav-link">Kick-Bot</a>
+        </nav>
     </header>
 
     <section class="hero">
         <div class="hero-content">
             <h1>A inteligência por trás do seu servidor</h1>
             <p>O ZIULBOT foi projetado para automatizar, moderar e interagir com alta performance. Moderno, rápido e hospedado diretamente em <strong>ziulbot.digital</strong>.</p>
-            <a href="#adicionar" class="btn">Adicionar ao Servidor</a>
+            <a href="kick-bot.html" class="btn">Configurar Kick-Bot</a>
         </div>
 
         <div class="hero-image">
