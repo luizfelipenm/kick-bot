@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ZIULBOT - O bot definitivo para simplificar seu dia a dia digital no domínio ziulbot.digital.">
+    <title>ZIULBOT | Início</title>
+    <style>
+        /* Reset e Variáveis */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        :root {
+            --bg-color: #0b0f19;
+            --surface-color: #1a2235;
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+            --accent-glow: #00f3ff;
+            --accent-dark: #0284c7;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navegação */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 5%;
+            background: rgba(11, 15, 25, 0.8);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(0, 243, 255, 0.1);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: #fff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo span {
+            color: var(--accent-glow);
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+        }
+
+        /* Hero Section */
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 100vh;
+            padding: 6rem 5% 2rem;
+            background: radial-gradient(circle at 80% 50%, rgba(2, 132, 199, 0.15) 0%, transparent 50%);
+        }
+
+        .hero-content {
+            flex: 1;
+            max-width: 600px;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(90deg, #fff, var(--accent-glow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #0b0f19;
+            background: var(--accent-glow);
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.4);
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 25px rgba(0, 243, 255, 0.6);
+            background: #fff;
+        }
+
+        /* Robô Ilustração (SVG) */
+        .hero-image {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .robot-svg {
+            width: 100%;
+            max-width: 450px;
+            filter: drop-shadow(0 0 20px rgba(0, 243, 255, 0.2));
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* Features Section */
+        .features {
+            padding: 5rem 5%;
+            background-color: var(--surface-color);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: rgba(11, 15, 25, 0.6);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-glow);
+        }
+
+        .card h3 {
+            color: var(--accent-glow);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background-color: #080b13;
+            color: var(--text-muted);
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        footer a {
+            color: var(--accent-glow);
+            text-decoration: none;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .hero {
+                flex-direction: column;
+                text-align: center;
+                padding-top: 8rem;
+            }
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            .hero-image {
+                margin-top: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="#" class="logo">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--accent-glow)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="10" rx="2"></rect>
+                <circle cx="12" cy="5" r="2"></circle>
+                <path d="M12 7v4"></path>
+                <line x1="8" y1="16" x2="8" y2="16"></line>
+                <line x1="16" y1="16" x2="16" y2="16"></line>
+            </svg>
+            ZIUL<span>BOT</span>
+        </a>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>A inteligência por trás do seu servidor</h1>
+            <p>O ZIULBOT foi projetado para automatizar, moderar e interagir com alta performance. Moderno, rápido e hospedado diretamente em <strong>ziulbot.digital</strong>.</p>
+            <a href="#adicionar" class="btn">Adicionar ao Servidor</a>
+        </div>
+
+        <div class="hero-image">
+            <svg class="robot-svg" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="neonGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#00f3ff" />
+                        <stop offset="100%" stop-color="#0284c7" />
+                    </linearGradient>
+                </defs>
+                <line x1="250" y1="80" x2="250" y2="150" stroke="url(#neonGlow)" stroke-width="8" stroke-linecap="round"/>
+                <circle cx="250" cy="70" r="15" fill="url(#neonGlow)" />
+                <circle cx="250" cy="70" r="25" fill="none" stroke="#00f3ff" stroke-width="2" opacity="0.5">
+                    <animate attributeName="r" values="15; 35; 15" dur="2s" repeatCount="indefinite"/>
+                    <animate attributeName="opacity" values="0.8; 0; 0.8" dur="2s" repeatCount="indefinite"/>
+                </circle>
+                
+                <rect x="125" y="150" width="250" height="180" rx="40" fill="#1a2235" stroke="url(#neonGlow)" stroke-width="6"/>
+                
+                <rect x="95" y="200" width="30" height="80" rx="10" fill="#2c3e50" stroke="#00f3ff" stroke-width="3"/>
+                <rect x="375" y="200" width="30" height="80" rx="10" fill="#2c3e50" stroke="#00f3ff" stroke-width="3"/>
+                
+                <rect x="150" y="180" width="200" height="120" rx="20" fill="#0b0f19" stroke="#334155" stroke-width="4"/>
+                
+                <rect x="180" y="210" width="40" height="20" rx="10" fill="#00f3ff">
+                    <animate attributeName="height" values="20; 5; 20" dur="4s" repeatCount="indefinite"/>
+                    <animate attributeName="y" values="210; 217.5; 210" dur="4s" repeatCount="indefinite"/>
+                </rect>
+                <rect x="280" y="210" width="40" height="20" rx="10" fill="#00f3ff">
+                    <animate attributeName="height" values="20; 5; 20" dur="4s" repeatCount="indefinite"/>
+                    <animate attributeName="y" values="210; 217.5; 210" dur="4s" repeatCount="indefinite"/>
+                </rect>
+                
+                <path d="M 200 270 Q 250 290 300 270" fill="none" stroke="#00f3ff" stroke-width="6" stroke-linecap="round"/>
+                
+                <rect x="210" y="330" width="80" height="40" fill="#1a2235" stroke="url(#neonGlow)" stroke-width="4"/>
+                <path d="M 150 370 L 350 370 L 380 420 L 120 420 Z" fill="#1a2235" stroke="url(#neonGlow)" stroke-width="5" stroke-linejoin="round"/>
+                
+                <circle cx="250" cy="395" r="10" fill="#00f3ff">
+                    <animate attributeName="opacity" values="0.3; 1; 0.3" dur="1.5s" repeatCount="indefinite"/>
+                </circle>
+            </svg>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="card">
+            <h3>⚡ Alta Velocidade</h3>
+            <p>Hospedado em infraestrutura de ponta, garantindo tempo de resposta de milissegundos para os seus comandos.</p>
+        </div>
+        <div class="card">
+            <h3>🛡️ Segurança</h3>
+            <p>Sistemas robustos de proteção e moderação automática para manter sua comunidade sempre segura.</p>
+        </div>
+        <div class="card">
+            <h3>⚙️ Customizável</h3>
+            <p>Configure comandos, mensagens de boas-vindas e módulos diretamente pelo seu painel de controle.</p>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 <strong>ZIULBOT</strong>. Todos os direitos reservados. Operando em <a href="https://ziulbot.digital">ziulbot.digital</a>.</p>
+    </footer>
+
+</body>
+</html>
