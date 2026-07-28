@@ -114,6 +114,17 @@ async function startBot() {
   log('INFO', `Bot iniciado → kick.com/${ch}`);
   log('INFO', `Modo: ${document.getElementById('modeSelect').value} · Intervalo: ${document.getElementById('intervalInput').value}s`);
 
+  const aiToggle = document.getElementById('aiModeToggle');
+  if (aiToggle && aiToggle.checked) {
+    try {
+      log('INFO', 'Conectando ao chat em tempo real...');
+      await connectKickChat(ch);
+      log('INFO', 'Chat conectado — capturando mensagens para a IA.');
+    } catch (err) {
+      log('WARN', `Falha ao conectar no chat (${err.message}). IA vai gerar sem contexto do chat.`);
+    }
+  }
+
   startUptime();
   schedule();
 }
@@ -123,6 +134,11 @@ function stopBot() {
   clearTimeout(sendTimer);
   clearInterval(progTimer);
   clearInterval(uptimeTimer);
+
+  if (typeof isChatConnected === 'function' && isChatConnected()) {
+    disconnectKickChat();
+    log('INFO', 'Chat desconectado.');
+  }
 
   setStatus('', 'INATIVO');
   document.getElementById('startBtn').style.display = '';
@@ -154,10 +170,37 @@ function schedule() {
 async function doSend() {
   const mode  = document.getElementById('modeSelect').value;
   const human = document.getElementById('humanToggle').checked;
+  const aiToggle = document.getElementById('aiModeToggle');
+  const aiMode   = aiToggle && aiToggle.checked;
 
-  const msg = mode === 'random'
+  const pickFromQueue = () => mode === 'random'
     ? msgs[Math.floor(Math.random() * msgs.length)]
     : msgs[idx++ % msgs.length];
+
+  let msg;
+
+  if (aiMode) {
+    try {
+      const persona = (document.getElementById('personaInput') || {}).value || '';
+      const recent  = typeof getRecentChatMessages === 'function' ? getRecentChatMessages(20) : [];
+
+      const res = await fetch('/api/groq-comment', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ messages: recent, persona }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Falha ao gerar comentário com IA.');
+
+      msg = data.comment;
+      log('INFO', `IA gerou: "${msg}"`);
+    } catch (err) {
+      log('WARN', `IA falhou (${err.message}) — usando mensagem da fila como alternativa.`);
+      msg = pickFromQueue();
+    }
+  } else {
+    msg = pickFromQueue();
+  }
 
   if (human) await sleep(800 + Math.random() * 1400);
 
@@ -271,6 +314,14 @@ function log(type, msg, cls) {
 function clearLog() {
   document.getElementById('logBody').innerHTML = '';
   log('INFO', 'Log limpo.');
+}
+
+// ── FEED DO CHAT (IA) ─────────────────────────────────
+function updateChatFeedUI() {
+  const el = document.getElementById('chatBufferCount');
+  if (!el) return;
+  const n = typeof getRecentChatMessages === 'function' ? getRecentChatMessages(999).length : 0;
+  el.textContent = `${n} mensagem${n === 1 ? '' : 's'} capturada${n === 1 ? '' : 's'}`;
 }
 
 // ── CONEXÃO KICK (OAuth) ──────────────────────────────

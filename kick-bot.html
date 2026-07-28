@@ -18,6 +18,9 @@
   <!-- Estilos -->
   <link rel="stylesheet" href="assets/css/base.css">
   <link rel="stylesheet" href="assets/css/bot.css">
+
+  <!-- Pusher (usado pelo listener de chat em tempo real da Kick) -->
+  <script src="https://js.pusher.com/8.4.0/pusher.min.js"></script>
 </head>
 <body>
 
@@ -79,6 +82,26 @@
           <option value="random">Aleatório — misturado</option>
         </select>
       </div>
+    </div>
+
+    <!-- IA (Groq) -->
+    <div class="sb-section">
+      <div class="sb-label">IA (Groq)</div>
+      <div class="toggle-row">
+        <div>
+          <div class="tl">Gerar comentários com IA</div>
+          <div class="tl-sub">Lê o chat em tempo real e comenta de acordo</div>
+        </div>
+        <label class="sw">
+          <input type="checkbox" id="aiModeToggle">
+          <span class="sw-track"></span>
+        </label>
+      </div>
+      <div class="field">
+        <label>Persona / instruções (opcional)</label>
+        <textarea id="personaInput" placeholder="Ex: torcedor fanático, bem hyped, usa gírias de futebol..."></textarea>
+      </div>
+      <div class="tl-sub" id="chatBufferCount" style="margin-top:.3rem;">0 mensagens capturadas</div>
     </div>
 
     <!-- Comportamento -->
@@ -194,6 +217,7 @@
 <script src="assets/js/utils.js"></script>
 <script src="assets/js/kick-config.js"></script>
 <script src="assets/js/kick-auth.js"></script>
+<script src="assets/js/kick-chat-listener.js"></script>
 <script src="assets/js/bot.js"></script>
 
 </body>
