@@ -9,6 +9,8 @@ let running = false;
 let sendTimer, progTimer, uptimeTimer;
 let idx = 0, sent = 0, errs = 0;
 let t0, nextAt, totalMs;
+let chatroomId    = null;   // ID numérico da sala de chat (resolvido a partir do canal)
+let resolvedForChannel = ''; // guarda de qual canal o chatroomId foi resolvido
 
 // ── MENSAGENS ─────────────────────────────────────────
 function addMessage() {
@@ -55,13 +57,47 @@ function renderMsgs() {
 }
 
 // ── BOT CORE ──────────────────────────────────────────
-function startBot() {
+
+/**
+ * Resolve o ID numérico da sala de chat a partir do nome do canal.
+ * A Kick exige o chatroomId (não o slug) para enviar mensagens.
+ */
+async function getChatroomId(channel) {
+  const res = await fetch(`https://kick.com/api/v2/channels/${encodeURIComponent(channel)}/chatroom`, {
+    headers: { 'Accept': 'application/json' }
+  });
+  if (!res.ok) {
+    throw new Error(`Canal "${channel}" não encontrado (HTTP ${res.status})`);
+  }
+  const data = await res.json();
+  if (!data || !data.id) {
+    throw new Error('Não foi possível obter o ID da sala de chat.');
+  }
+  return data.id;
+}
+
+async function startBot() {
   const ch = document.getElementById('channelInput').value.trim();
   const tk = document.getElementById('tokenInput').value.trim();
 
   if (!ch)          { log('ERR',  'Informe o nome do canal.'); return; }
   if (!tk)          { log('ERR',  'Informe o token de sessão.'); return; }
   if (!msgs.length) { log('WARN', 'Adicione pelo menos uma mensagem antes de iniciar.'); return; }
+
+  // Resolve o chatroomId antes de iniciar (só busca de novo se o canal mudou)
+  if (!chatroomId || resolvedForChannel !== ch) {
+    log('INFO', `Buscando sala de chat do canal "${ch}"...`);
+    try {
+      chatroomId = await getChatroomId(ch);
+      resolvedForChannel = ch;
+      log('INFO', `Sala encontrada → chatroomId ${chatroomId}`);
+    } catch (err) {
+      log('ERR', err.message.includes('fetch') || err.name === 'TypeError'
+        ? 'CORS bloqueado ao buscar o canal. Use a extensão "CORS Unblock" ou um proxy local.'
+        : err.message);
+      return;
+    }
+  }
 
   running = true; t0 = Date.now(); sent = 0; errs = 0; idx = 0;
   setStatus('on', 'RODANDO');
@@ -110,7 +146,6 @@ function schedule() {
 }
 
 async function doSend() {
-  const ch    = document.getElementById('channelInput').value.trim();
   const tk    = document.getElementById('tokenInput').value.trim();
   const mode  = document.getElementById('modeSelect').value;
   const human = document.getElementById('humanToggle').checked;
@@ -123,7 +158,7 @@ async function doSend() {
 
   try {
     const res = await fetch(
-      `https://kick.com/api/v2/messages/send/${encodeURIComponent(ch)}`,
+      `https://kick.com/api/v2/messages/send/${chatroomId}`,
       {
         method: 'POST',
         headers: {
