@@ -9,8 +9,8 @@ let running = false;
 let sendTimer, progTimer, uptimeTimer;
 let idx = 0, sent = 0, errs = 0;
 let t0, nextAt, totalMs;
-let chatroomId    = null;   // ID numérico da sala de chat (resolvido a partir do canal)
-let resolvedForChannel = ''; // guarda de qual canal o chatroomId foi resolvido
+let broadcasterId      = null; // ID numérico do canal (API oficial da Kick)
+let resolvedForChannel = '';   // guarda de qual canal o broadcasterId foi resolvido
 
 // ── MENSAGENS ─────────────────────────────────────────
 function addMessage() {
@@ -59,44 +59,48 @@ function renderMsgs() {
 // ── BOT CORE ──────────────────────────────────────────
 
 /**
- * Resolve o ID numérico da sala de chat a partir do nome do canal.
- * A Kick exige o chatroomId (não o slug) para enviar mensagens.
- * Endpoint correto: GET /api/v2/channels/{slug} → { ..., chatroom: { id, ... } }
+ * Resolve o broadcaster_user_id do canal via API oficial da Kick.
+ * GET https://api.kick.com/public/v1/channels?slug={canal}
  */
-async function getChatroomId(channel) {
-  const res = await fetch(`https://kick.com/api/v2/channels/${encodeURIComponent(channel)}`, {
-    headers: { 'Accept': 'application/json' }
-  });
+async function getBroadcasterId(channel, token) {
+  const res = await fetch(
+    `https://api.kick.com/public/v1/channels?slug=${encodeURIComponent(channel)}`,
+    { headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/json' } }
+  );
   if (!res.ok) {
     throw new Error(`Canal "${channel}" não encontrado (HTTP ${res.status})`);
   }
-  const data = await res.json();
-  const id = data && data.chatroom && data.chatroom.id;
-  if (!id) {
-    throw new Error('Não foi possível obter o ID da sala de chat (resposta sem chatroom.id).');
+  const json = await res.json();
+  const item = json.data && json.data[0];
+  if (!item) {
+    throw new Error(`Canal "${channel}" não encontrado na resposta da API.`);
   }
-  return id;
+  return item.broadcaster_user_id;
 }
 
 async function startBot() {
   const ch = document.getElementById('channelInput').value.trim();
-  const tk = document.getElementById('tokenInput').value.trim();
 
   if (!ch)          { log('ERR',  'Informe o nome do canal.'); return; }
-  if (!tk)          { log('ERR',  'Informe o token de sessão.'); return; }
   if (!msgs.length) { log('WARN', 'Adicione pelo menos uma mensagem antes de iniciar.'); return; }
 
-  // Resolve o chatroomId antes de iniciar (só busca de novo se o canal mudou)
-  if (!chatroomId || resolvedForChannel !== ch) {
-    log('INFO', `Buscando sala de chat do canal "${ch}"...`);
+  if (!isConnected()) {
+    log('ERR', 'Conecte sua conta Kick antes de iniciar (botão "Conectar com Kick").');
+    return;
+  }
+
+  const token = await getValidAccessToken();
+  if (!token) { log('ERR', 'Sessão Kick inválida. Conecte novamente.'); return; }
+
+  // Resolve o broadcasterId antes de iniciar (só busca de novo se o canal mudou)
+  if (!broadcasterId || resolvedForChannel !== ch) {
+    log('INFO', `Buscando canal "${ch}"...`);
     try {
-      chatroomId = await getChatroomId(ch);
+      broadcasterId = await getBroadcasterId(ch, token);
       resolvedForChannel = ch;
-      log('INFO', `Sala encontrada → chatroomId ${chatroomId}`);
+      log('INFO', `Canal encontrado → broadcaster_user_id ${broadcasterId}`);
     } catch (err) {
-      log('ERR', err.message.includes('fetch') || err.name === 'TypeError'
-        ? 'CORS bloqueado ao buscar o canal. Use a extensão "CORS Unblock" ou um proxy local.'
-        : err.message);
+      log('ERR', err.message);
       return;
     }
   }
@@ -148,7 +152,6 @@ function schedule() {
 }
 
 async function doSend() {
-  const tk    = document.getElementById('tokenInput').value.trim();
   const mode  = document.getElementById('modeSelect').value;
   const human = document.getElementById('humanToggle').checked;
 
@@ -158,45 +161,50 @@ async function doSend() {
 
   if (human) await sleep(800 + Math.random() * 1400);
 
+  const token = await getValidAccessToken();
+  if (!token) {
+    errs++;
+    log('ERR', 'Sessão Kick expirada. Conecte novamente.');
+    if (document.getElementById('autoStopToggle').checked) stopBot();
+    updateStats();
+    return;
+  }
+
   try {
-    const res = await fetch(
-      `https://kick.com/api/v2/messages/send/${chatroomId}`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type':  'application/json',
-          'Authorization': `Bearer ${tk}`,
-          'Accept':        'application/json',
-          'X-Socket-ID':   `${rnd()}.${rnd()}`,
-        },
-        body: JSON.stringify({ content: msg, type: 'message' }),
-      }
-    );
+    const res = await fetch('https://api.kick.com/public/v1/chat', {
+      method: 'POST',
+      headers: {
+        'Content-Type':  'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        broadcaster_user_id: broadcasterId,
+        content: msg,
+        type: 'user',
+      }),
+    });
 
     if (res.ok) {
       sent++;
       log('SENT', `→ "${msg.length > 60 ? msg.substring(0, 60) + '…' : msg}"`, 'sent');
     } else if (res.status === 401) {
       errs++;
-      log('ERR', 'Token inválido ou expirado (401). Verifique suas credenciais.');
+      log('ERR', 'Token inválido ou expirado (401). Verifique a conexão com a Kick.');
       if (document.getElementById('autoStopToggle').checked) stopBot();
-    } else if (res.status === 422) {
+    } else if (res.status === 403) {
       errs++;
-      log('ERR', 'Erro 422: canal não encontrado ou sem permissão para comentar.');
+      log('ERR', 'Sem permissão (403) — verifique se o escopo "chat:write" foi concedido.');
     } else if (res.status === 429) {
       errs++;
       log('WARN', 'Rate limit (429) — aguardando próximo ciclo.');
     } else {
+      const body = await res.text().catch(() => '');
       errs++;
-      log('ERR', `HTTP ${res.status}: ${res.statusText}`);
+      log('ERR', `HTTP ${res.status}: ${res.statusText}${body ? ' — ' + body.slice(0, 120) : ''}`);
     }
   } catch (err) {
     errs++;
-    if (err.name === 'TypeError') {
-      log('ERR', 'CORS bloqueado. Use a extensão "CORS Unblock" no Chrome/Firefox ou um proxy local.');
-    } else {
-      log('ERR', `Erro de rede: ${err.message}`);
-    }
+    log('ERR', `Erro de rede: ${err.message}`);
   }
 
   updateStats();
@@ -265,6 +273,25 @@ function clearLog() {
   log('INFO', 'Log limpo.');
 }
 
+// ── CONEXÃO KICK (OAuth) ──────────────────────────────
+function updateConnUI() {
+  const box = document.getElementById('kickConnBox');
+  if (!box) return;
+
+  if (isConnected()) {
+    box.innerHTML = `
+      <div class="conn-status conn-ok">
+        <span class="conn-dot"></span> Conectado à Kick
+        <button class="btn btn-sm" style="width:auto;padding:.3rem .6rem;margin-left:8px;" onclick="disconnectKick()">Desconectar</button>
+      </div>`;
+  } else {
+    box.innerHTML = `
+      <button class="btn btn-go" style="width:100%;" onclick="startKickLogin()">
+        🔗 Conectar com Kick
+      </button>`;
+  }
+}
+
 // ── INIT ──────────────────────────────────────────────
 msgs = [
   'VAMOS VAMOS! 🔥',
@@ -275,3 +302,8 @@ msgs = [
 ];
 renderMsgs();
 updateStats();
+
+(async function initKickConnection() {
+  await handleOAuthCallback(); // processa ?code=... se o navegador acabou de voltar da Kick
+  updateConnUI();
+})();

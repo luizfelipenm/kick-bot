@@ -304,6 +304,26 @@ textarea { height: 72px; line-height: 1.55; }
 }
 .token-helper strong { color: #ffc94a; }
 
+/* ── CONEXÃO KICK (OAuth) ────────────────────────────── */
+.conn-status {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: .78rem;
+  color: var(--text);
+  background: #0a0d0a;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: .55rem .7rem;
+}
+.conn-status.conn-ok { border-color: var(--border2); }
+.conn-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--g);
+  box-shadow: 0 0 8px var(--g);
+  flex-shrink: 0;
+}
+
 /* Code copy dentro do helper */
 .code-copy-wrap {
   position: relative;
