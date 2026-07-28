@@ -61,19 +61,21 @@ function renderMsgs() {
 /**
  * Resolve o ID numérico da sala de chat a partir do nome do canal.
  * A Kick exige o chatroomId (não o slug) para enviar mensagens.
+ * Endpoint correto: GET /api/v2/channels/{slug} → { ..., chatroom: { id, ... } }
  */
 async function getChatroomId(channel) {
-  const res = await fetch(`https://kick.com/api/v2/channels/${encodeURIComponent(channel)}/chatroom`, {
+  const res = await fetch(`https://kick.com/api/v2/channels/${encodeURIComponent(channel)}`, {
     headers: { 'Accept': 'application/json' }
   });
   if (!res.ok) {
     throw new Error(`Canal "${channel}" não encontrado (HTTP ${res.status})`);
   }
   const data = await res.json();
-  if (!data || !data.id) {
-    throw new Error('Não foi possível obter o ID da sala de chat.');
+  const id = data && data.chatroom && data.chatroom.id;
+  if (!id) {
+    throw new Error('Não foi possível obter o ID da sala de chat (resposta sem chatroom.id).');
   }
-  return data.id;
+  return id;
 }
 
 async function startBot() {
