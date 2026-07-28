@@ -1,303 +1,539 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="ZIULBOT - O bot definitivo para simplificar seu dia a dia digital no domínio ziulbot.digital.">
-    <title>ZIULBOT | Início</title>
-    <style>
-        /* Reset e Variáveis */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="ZIULBOT — Bot de chat automático para lives na Kick.com. Compatível com Windows, Android e iOS.">
+<title>ZIULBOT — Kick Chat Automator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;700&family=Space+Mono&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
-        :root {
-            --bg-color: #0b0f19;
-            --surface-color: #1a2235;
-            --text-main: #e2e8f0;
-            --text-muted: #94a3b8;
-            --accent-glow: #00f3ff;
-            --accent-dark: #0284c7;
-        }
+:root{
+  --g: #53fc18;
+  --g2: #2bbd00;
+  --bg: #080a08;
+  --s1: #0e120e;
+  --s2: #141a14;
+  --border: rgba(83,252,24,0.12);
+  --muted: #556655;
+  --text: #c8d8c8;
+  --white: #f0f7f0;
+}
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
+html{scroll-behavior:smooth}
 
-        /* Navegação */
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 2rem 5%;
-            background: rgba(11, 15, 25, 0.8);
-            backdrop-filter: blur(10px);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 100;
-            border-bottom: 1px solid rgba(0, 243, 255, 0.1);
-        }
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Inter',sans-serif;
+  overflow-x:hidden;
+  line-height:1.6;
+}
 
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 800;
-            letter-spacing: 2px;
-            color: #fff;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+/* ── NOISE TEXTURE ── */
+body::after{
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events:none;
+  z-index:9999;
+  opacity:.4;
+}
 
-        .logo span {
-            color: var(--accent-glow);
-            text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
-        }
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;
+  z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.1rem 5%;
+  background:rgba(8,10,8,.85);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+}
 
-        nav {
-            display: flex;
-            gap: 2rem;
-            align-items: center;
-        }
+.nav-logo{
+  font-family:'Space Grotesk',sans-serif;
+  font-weight:700;font-size:1.3rem;
+  color:var(--white);
+  text-decoration:none;
+  letter-spacing:-.5px;
+  display:flex;align-items:center;gap:8px;
+}
+.nav-logo .dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--g);
+  box-shadow:0 0 10px var(--g);
+}
 
-        .nav-link {
-            color: var(--text-main);
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
+.nav-links{display:flex;align-items:center;gap:2rem;}
+.nav-links a{
+  color:var(--muted);text-decoration:none;font-size:.9rem;font-weight:500;
+  transition:color .2s;
+}
+.nav-links a:hover{color:var(--g);}
 
-        .nav-link:hover {
-            color: var(--accent-glow);
-        }
+.nav-cta{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--g);color:#000;
+  font-weight:600;font-size:.85rem;
+  padding:.55rem 1.2rem;border-radius:8px;
+  text-decoration:none;
+  transition:all .2s;
+  box-shadow:0 0 20px rgba(83,252,24,.25);
+}
+.nav-cta:hover{background:#fff;box-shadow:0 0 30px rgba(83,252,24,.4);}
 
-        /* Hero Section */
-        .hero {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            min-height: 100vh;
-            padding: 6rem 5% 2rem;
-            background: radial-gradient(circle at 80% 50%, rgba(2, 132, 199, 0.15) 0%, transparent 50%);
-        }
+@media(max-width:640px){
+  .nav-links{display:none;}
+}
 
-        .hero-content {
-            flex: 1;
-            max-width: 600px;
-        }
+/* ── HERO ── */
+.hero{
+  min-height:100vh;
+  display:flex;align-items:center;
+  padding:8rem 5% 4rem;
+  position:relative;
+  overflow:hidden;
+}
 
-        .hero-content h1 {
-            font-size: 3.5rem;
-            line-height: 1.2;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(90deg, #fff, var(--accent-glow));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+/* Grid de fundo */
+.hero::before{
+  content:'';
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(83,252,24,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(83,252,24,.04) 1px, transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(ellipse 80% 60% at 50% 50%, black, transparent);
+}
 
-        .hero-content p {
-            font-size: 1.2rem;
-            color: var(--text-muted);
-            margin-bottom: 2rem;
-        }
+/* Glow central */
+.hero-glow{
+  position:absolute;
+  top:50%;left:60%;
+  transform:translate(-50%,-50%);
+  width:600px;height:600px;
+  background:radial-gradient(circle, rgba(83,252,24,.08) 0%, transparent 70%);
+  pointer-events:none;
+}
 
-        .btn {
-            display: inline-block;
-            padding: 1rem 2rem;
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #0b0f19;
-            background: var(--accent-glow);
-            border: none;
-            border-radius: 8px;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.4);
-            cursor: pointer;
-        }
+.hero-content{
+  position:relative;z-index:1;
+  max-width:680px;
+}
 
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 0 25px rgba(0, 243, 255, 0.6);
-            background: #fff;
-        }
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(83,252,24,.08);
+  border:1px solid var(--border);
+  border-radius:999px;
+  padding:.35rem 1rem;
+  font-size:.75rem;font-weight:500;
+  color:var(--g);letter-spacing:.5px;
+  text-transform:uppercase;
+  margin-bottom:1.5rem;
+}
+.hero-eyebrow .pulse{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--g);
+  animation:blink 1.5s infinite;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
 
-        /* Robô Ilustração (SVG) */
-        .hero-image {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            animation: float 4s ease-in-out infinite;
-        }
+.hero h1{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:clamp(2.6rem,6vw,4.5rem);
+  font-weight:700;
+  line-height:1.08;
+  letter-spacing:-2px;
+  color:var(--white);
+  margin-bottom:1.5rem;
+}
+.hero h1 em{
+  font-style:normal;
+  color:var(--g);
+}
 
-        .robot-svg {
-            width: 100%;
-            max-width: 450px;
-            filter: drop-shadow(0 0 20px rgba(0, 243, 255, 0.2));
-        }
+.hero p{
+  font-size:1.1rem;
+  color:var(--muted);
+  max-width:500px;
+  margin-bottom:2.5rem;
+  line-height:1.7;
+}
 
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-            100% { transform: translateY(0px); }
-        }
+.hero-actions{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;}
 
-        /* Features Section */
-        .features {
-            padding: 5rem 5%;
-            background-color: var(--surface-color);
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
+.btn-hero{
+  display:inline-flex;align-items:center;gap:10px;
+  background:var(--g);color:#000;
+  font-weight:700;font-size:1rem;
+  padding:.85rem 2rem;border-radius:10px;
+  text-decoration:none;
+  transition:all .2s;
+  box-shadow:0 4px 30px rgba(83,252,24,.3);
+}
+.btn-hero:hover{background:#fff;transform:translateY(-2px);box-shadow:0 8px 40px rgba(83,252,24,.4);}
 
-        .card {
-            background: rgba(11, 15, 25, 0.6);
-            padding: 2rem;
-            border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.05);
-            transition: transform 0.3s ease, border-color 0.3s ease;
-        }
+.btn-ghost-hero{
+  display:inline-flex;align-items:center;gap:8px;
+  color:var(--muted);font-size:.95rem;font-weight:500;
+  text-decoration:none;
+  transition:color .2s;
+}
+.btn-ghost-hero:hover{color:var(--white);}
 
-        .card:hover {
-            transform: translateY(-5px);
-            border-color: var(--accent-glow);
-        }
+.hero-terminal{
+  margin-top:2.5rem;
+  background:var(--s1);
+  border:1px solid var(--border);
+  border-radius:12px;
+  overflow:hidden;
+  max-width:480px;
+}
+.terminal-bar{
+  background:var(--s2);
+  padding:.6rem 1rem;
+  display:flex;align-items:center;gap:6px;
+  border-bottom:1px solid var(--border);
+}
+.tbar-dot{width:10px;height:10px;border-radius:50%;}
+.terminal-body{
+  padding:1rem 1.2rem;
+  font-family:'Space Mono',monospace;
+  font-size:.78rem;
+  line-height:1.8;
+}
+.tc{color:var(--muted);}
+.tg{color:var(--g);}
+.tw{color:var(--white);}
+.ty{color:#f5a623;}
 
-        .card h3 {
-            color: var(--accent-glow);
-            margin-bottom: 1rem;
-            font-size: 1.5rem;
-        }
+/* ── STATS ROW ── */
+.stats-section{
+  padding:3rem 5%;
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  background:var(--s1);
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:1rem;
+}
+@media(max-width:640px){.stats-section{grid-template-columns:repeat(2,1fr);}}
 
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 2rem;
-            background-color: #080b13;
-            color: var(--text-muted);
-            border-top: 1px solid rgba(255,255,255,0.05);
-        }
+.stat-item{text-align:center;padding:1rem;}
+.stat-num{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:2.2rem;font-weight:700;
+  color:var(--g);line-height:1;
+}
+.stat-desc{font-size:.78rem;color:var(--muted);margin-top:.4rem;text-transform:uppercase;letter-spacing:.5px;}
 
-        footer a {
-            color: var(--accent-glow);
-            text-decoration: none;
-        }
+/* ── FEATURES ── */
+.features-section{
+  padding:6rem 5%;
+}
+.section-label{
+  font-size:.72rem;color:var(--g);
+  letter-spacing:2px;text-transform:uppercase;
+  font-weight:600;margin-bottom:.8rem;
+}
+.section-title{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:clamp(1.8rem,4vw,2.8rem);
+  font-weight:700;letter-spacing:-1px;
+  color:var(--white);margin-bottom:3.5rem;
+  line-height:1.15;
+}
 
-        /* Responsividade */
-        @media (max-width: 768px) {
-            .hero {
-                flex-direction: column;
-                text-align: center;
-                padding-top: 8rem;
-            }
-            .hero-content h1 {
-                font-size: 2.5rem;
-            }
-            .hero-image {
-                margin-top: 3rem;
-            }
-            nav {
-                display: none; /* Oculta o menu simples em telas pequenas (pode ser adaptado para um menu sanduíche se necessário) */
-            }
-        }
-    </style>
+.features-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1px;
+  background:var(--border);
+  border:1px solid var(--border);
+  border-radius:16px;
+  overflow:hidden;
+}
+@media(max-width:860px){.features-grid{grid-template-columns:1fr;}}
+@media(min-width:861px) and (max-width:1100px){.features-grid{grid-template-columns:repeat(2,1fr);}}
+
+.feature-card{
+  background:var(--s1);
+  padding:2rem;
+  transition:background .2s;
+}
+.feature-card:hover{background:var(--s2);}
+
+.feature-icon{
+  width:44px;height:44px;
+  background:rgba(83,252,24,.1);
+  border:1px solid var(--border);
+  border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.2rem;
+  margin-bottom:1.2rem;
+}
+.feature-card h3{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:1rem;font-weight:600;
+  color:var(--white);margin-bottom:.5rem;
+}
+.feature-card p{font-size:.88rem;color:var(--muted);line-height:1.65;}
+
+/* ── HOW TO ── */
+.howto-section{
+  padding:6rem 5%;
+  background:var(--s1);
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+}
+
+.steps{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:2rem;
+  margin-top:3rem;
+}
+@media(max-width:720px){.steps{grid-template-columns:1fr;}}
+
+.step{
+  display:flex;gap:1.2rem;
+}
+.step-num{
+  flex-shrink:0;
+  width:36px;height:36px;
+  border:1px solid var(--border);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Space Mono',monospace;
+  font-size:.78rem;
+  color:var(--g);
+  margin-top:.1rem;
+}
+.step-body h4{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:1rem;font-weight:600;
+  color:var(--white);margin-bottom:.4rem;
+}
+.step-body p{font-size:.87rem;color:var(--muted);line-height:1.65;}
+.step-code{
+  display:inline-block;
+  margin-top:.7rem;
+  background:var(--bg);
+  border:1px solid var(--border);
+  border-radius:6px;
+  padding:.4rem .8rem;
+  font-family:'Space Mono',monospace;
+  font-size:.72rem;
+  color:var(--g);
+  word-break:break-all;
+}
+
+/* ── CTA FINAL ── */
+.cta-section{
+  padding:6rem 5%;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+.cta-section::before{
+  content:'';
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:500px;height:500px;
+  background:radial-gradient(circle,rgba(83,252,24,.06),transparent 70%);
+  pointer-events:none;
+}
+.cta-section h2{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:clamp(2rem,5vw,3.2rem);
+  font-weight:700;letter-spacing:-1.5px;
+  color:var(--white);margin-bottom:1rem;
+  position:relative;
+}
+.cta-section p{
+  color:var(--muted);font-size:1.05rem;
+  max-width:440px;margin:0 auto 2.5rem;
+  position:relative;
+}
+
+/* ── FOOTER ── */
+footer{
+  border-top:1px solid var(--border);
+  padding:2rem 5%;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:1rem;
+}
+.footer-logo{
+  font-family:'Space Grotesk',sans-serif;
+  font-weight:700;color:var(--muted);
+  font-size:.9rem;letter-spacing:-.5px;
+}
+footer p{font-size:.78rem;color:var(--muted);}
+footer a{color:var(--g);text-decoration:none;}
+</style>
 </head>
 <body>
 
-    <header>
-        <a href="#" class="logo">
-            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--accent-glow)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="11" width="18" height="10" rx="2"></rect>
-                <circle cx="12" cy="5" r="2"></circle>
-                <path d="M12 7v4"></path>
-                <line x1="8" y1="16" x2="8" y2="16"></line>
-                <line x1="16" y1="16" x2="16" y2="16"></line>
-            </svg>
-            ZIUL<span>BOT</span>
-        </a>
-        <nav>
-            <a href="#" class="nav-link">Início</a>
-            <a href="kick-bot.html" class="nav-link">Kick-Bot</a>
-        </nav>
-    </header>
+<nav>
+  <a href="#" class="nav-logo">
+    <span class="dot"></span>
+    ZIULBOT
+  </a>
+  <div class="nav-links">
+    <a href="#funcionalidades">Funcionalidades</a>
+    <a href="#como-usar">Como usar</a>
+    <a href="kick-bot.html" class="nav-cta">Abrir Bot →</a>
+  </div>
+</nav>
 
-    <section class="hero">
-        <div class="hero-content">
-            <h1>A inteligência por trás do seu servidor</h1>
-            <p>O ZIULBOT foi projetado para automatizar, moderar e interagir com alta performance. Moderno, rápido e hospedado diretamente em <strong>ziulbot.digital</strong>.</p>
-            <a href="kick-bot.html" class="btn">Configurar Kick-Bot</a>
-        </div>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <span class="pulse"></span>
+      Kick.com Chat Bot
+    </div>
+    <h1>Seu chat,<br>no <em>piloto automático</em></h1>
+    <p>ZIULBOT comenta automaticamente em qualquer live da Kick. Configure suas mensagens, defina o intervalo e deixa rolar — funciona no navegador, sem instalar nada.</p>
+    <div class="hero-actions">
+      <a href="kick-bot.html" class="btn-hero">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+        Iniciar agora
+      </a>
+      <a href="#como-usar" class="btn-ghost-hero">Como funciona →</a>
+    </div>
 
-        <div class="hero-image">
-            <svg class="robot-svg" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                    <linearGradient id="neonGlow" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#00f3ff" />
-                        <stop offset="100%" stop-color="#0284c7" />
-                    </linearGradient>
-                </defs>
-                <line x1="250" y1="80" x2="250" y2="150" stroke="url(#neonGlow)" stroke-width="8" stroke-linecap="round"/>
-                <circle cx="250" cy="70" r="15" fill="url(#neonGlow)" />
-                <circle cx="250" cy="70" r="25" fill="none" stroke="#00f3ff" stroke-width="2" opacity="0.5">
-                    <animate attributeName="r" values="15; 35; 15" dur="2s" repeatCount="indefinite"/>
-                    <animate attributeName="opacity" values="0.8; 0; 0.8" dur="2s" repeatCount="indefinite"/>
-                </circle>
-                
-                <rect x="125" y="150" width="250" height="180" rx="40" fill="#1a2235" stroke="url(#neonGlow)" stroke-width="6"/>
-                
-                <rect x="95" y="200" width="30" height="80" rx="10" fill="#2c3e50" stroke="#00f3ff" stroke-width="3"/>
-                <rect x="375" y="200" width="30" height="80" rx="10" fill="#2c3e50" stroke="#00f3ff" stroke-width="3"/>
-                
-                <rect x="150" y="180" width="200" height="120" rx="20" fill="#0b0f19" stroke="#334155" stroke-width="4"/>
-                
-                <rect x="180" y="210" width="40" height="20" rx="10" fill="#00f3ff">
-                    <animate attributeName="height" values="20; 5; 20" dur="4s" repeatCount="indefinite"/>
-                    <animate attributeName="y" values="210; 217.5; 210" dur="4s" repeatCount="indefinite"/>
-                </rect>
-                <rect x="280" y="210" width="40" height="20" rx="10" fill="#00f3ff">
-                    <animate attributeName="height" values="20; 5; 20" dur="4s" repeatCount="indefinite"/>
-                    <animate attributeName="y" values="210; 217.5; 210" dur="4s" repeatCount="indefinite"/>
-                </rect>
-                
-                <path d="M 200 270 Q 250 290 300 270" fill="none" stroke="#00f3ff" stroke-width="6" stroke-linecap="round"/>
-                
-                <rect x="210" y="330" width="80" height="40" fill="#1a2235" stroke="url(#neonGlow)" stroke-width="4"/>
-                <path d="M 150 370 L 350 370 L 380 420 L 120 420 Z" fill="#1a2235" stroke="url(#neonGlow)" stroke-width="5" stroke-linejoin="round"/>
-                
-                <circle cx="250" cy="395" r="10" fill="#00f3ff">
-                    <animate attributeName="opacity" values="0.3; 1; 0.3" dur="1.5s" repeatCount="indefinite"/>
-                </circle>
-            </svg>
-        </div>
-    </section>
+    <div class="hero-terminal">
+      <div class="terminal-bar">
+        <div class="tbar-dot" style="background:#ff5f57"></div>
+        <div class="tbar-dot" style="background:#febc2e"></div>
+        <div class="tbar-dot" style="background:#28c840"></div>
+        <span style="margin-left:8px;font-family:'Space Mono',monospace;font-size:.68rem;color:#444">ziulbot ~ kick-chat</span>
+      </div>
+      <div class="terminal-body">
+        <div><span class="tc">$</span> <span class="tg">ziulbot</span> <span class="tw">--channel gaules --start</span></div>
+        <div><span class="tc">→</span> <span class="tw">Conectado ao canal</span> <span class="tg">gaules</span></div>
+        <div><span class="tc">→</span> <span class="tw">5 mensagens na fila</span></div>
+        <div><span class="ty">✦</span> <span class="tw">Enviado:</span> <span class="tc">"VAMOS VAMOS! 🔥"</span></div>
+        <div><span class="tc">→</span> <span class="tw">Próximo envio em</span> <span class="tg">28.4s</span></div>
+        <div><span class="ty">✦</span> <span class="tw">Enviado:</span> <span class="tc">"GG no chat! 👏"</span></div>
+        <div><span class="tg">▌</span></div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <section class="features">
-        <div class="card">
-            <h3>⚡ Alta Velocidade</h3>
-            <p>Hospedado em infraestrutura de ponta, garantindo tempo de resposta de milissegundos para os seus comandos.</p>
-        </div>
-        <div class="card">
-            <h3>🛡️ Segurança</h3>
-            <p>Sistemas robustos de proteção e moderação automática para manter sua comunidade sempre segura.</p>
-        </div>
-        <div class="card">
-            <h3>⚙️ Customizável</h3>
-            <p>Configure comandos, mensagens de boas-vindas e módulos diretamente pelo seu painel de controle.</p>
-        </div>
-    </section>
+<!-- STATS -->
+<div class="stats-section">
+  <div class="stat-item">
+    <div class="stat-num">100%</div>
+    <div class="stat-desc">Sem instalação</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">3</div>
+    <div class="stat-desc">Plataformas</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">∞</div>
+    <div class="stat-desc">Mensagens</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">0ms</div>
+    <div class="stat-desc">Setup</div>
+  </div>
+</div>
 
-    <footer>
-        <p>&copy; 2026 <strong>ZIULBOT</strong>. Todos os direitos reservados. Operando em <a href="https://ziulbot.digital">ziulbot.digital</a>.</p>
-    </footer>
+<!-- FEATURES -->
+<section class="features-section" id="funcionalidades">
+  <div class="section-label">Funcionalidades</div>
+  <div class="section-title">Tudo que você precisa<br>pra dominar o chat</div>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">💬</div>
+      <h3>Fila de mensagens</h3>
+      <p>Adicione quantas mensagens quiser. O bot percorre a lista e envia uma de cada vez.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🎲</div>
+      <h3>Modo aleatório</h3>
+      <p>Ative o modo random para o bot misturar as mensagens e parecer mais natural no chat.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">⏱</div>
+      <h3>Intervalo configurável</h3>
+      <p>Defina quantos segundos entre cada envio. Adicione variação para evitar padrões detectáveis.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🧠</div>
+      <h3>Simulação humana</h3>
+      <p>Atraso aleatório de digitação antes de cada mensagem. Parece um humano de verdade.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📊</div>
+      <h3>Log em tempo real</h3>
+      <p>Acompanhe cada envio, erro e aviso no log de atividade com timestamp preciso.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🛡️</div>
+      <h3>Auto-proteção</h3>
+      <p>Para automaticamente se o token expirar ou a live encerrar. Nada fica rodando à toa.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW TO -->
+<section class="howto-section" id="como-usar">
+  <div class="section-label">Como usar</div>
+  <div class="section-title">Pronto em 3 passos</div>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <div class="step-body">
+        <h4>Faça login no Kick</h4>
+        <p>Acesse kick.com e entre na sua conta normalmente pelo navegador.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <div class="step-body">
+        <h4>Copie o token de sessão</h4>
+        <p>Abra o console (F12) e cole o comando abaixo para obter seu token.</p>
+        <div class="step-code">document.cookie.split('; ').find(function(c){ return c.indexOf('session_token=') === 0; }).split('=')[1]</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <div class="step-body">
+        <h4>Configure e inicie</h4>
+        <p>Cole o token no bot, informe o canal, adicione suas mensagens e clique em Iniciar.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2>Pronto pra testar?</h2>
+  <p>Abre o bot, configura em menos de 1 minuto e deixa o ZIULBOT trabalhar por você.</p>
+  <a href="kick-bot.html" class="btn-hero" style="display:inline-flex;">
+    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+    Abrir o bot agora
+  </a>
+</section>
+
+<footer>
+  <span class="footer-logo">ZIULBOT</span>
+  <p>Compatível com Windows · Android · iOS &nbsp;·&nbsp; <a href="kick-bot.html">Acessar bot</a></p>
+  <p style="color:#333;font-size:.72rem;">Use com responsabilidade. Respeite os ToS da Kick.com.</p>
+</footer>
 
 </body>
 </html>
