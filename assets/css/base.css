@@ -1,0 +1,163 @@
+/* ============================================================
+   ZIULBOT — base.css
+   Variáveis globais, reset e utilitários compartilhados
+   ============================================================ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  /* Cores */
+  --g:       #53fc18;
+  --g2:      #2bbd00;
+  --bg:      #080a08;
+  --s1:      #0e120e;
+  --s2:      #141a14;
+  --border:  rgba(83, 252, 24, 0.12);
+  --border2: rgba(83, 252, 24, 0.25);
+  --muted:   #556655;
+  --muted2:  #7a987a;
+  --text:    #c8d8c8;
+  --white:   #f0f7f0;
+  --danger:  #ff4444;
+  --warn:    #f5a623;
+  --blue:    #53b8fc;
+
+  /* Tipografia */
+  --font-sans:  'Inter', sans-serif;
+  --font-head:  'Space Grotesk', sans-serif;
+  --font-mono:  'Space Mono', monospace;
+
+  /* Espaçamento padrão */
+  --px: 5%;
+  --r:  12px;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  overflow-x: hidden;
+  min-height: 100svh;
+}
+
+/* Noise overlay */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  opacity: .35;
+}
+
+/* Animações base */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: .15; }
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes pglow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(83, 252, 24, .5); }
+  50%       { box-shadow: 0 0 0 5px rgba(83, 252, 24, 0); }
+}
+@keyframes orbFloat {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50%       { transform: translateY(-30px) scale(1.05); }
+}
+
+/* Botão primário (verde) */
+.btn-primary-g {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  background: var(--g);
+  color: #000;
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: .95rem;
+  padding: .8rem 1.8rem;
+  border-radius: 10px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: all .2s;
+  box-shadow: 0 4px 28px rgba(83, 252, 24, .3);
+}
+.btn-primary-g:hover {
+  background: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 36px rgba(83, 252, 24, .4);
+}
+.btn-primary-g:active { transform: translateY(0); }
+
+/* Bloco código + botão copiar */
+.code-block {
+  position: relative;
+  margin-top: .8rem;
+  background: rgba(83, 252, 24, .04);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: .6rem 3.4rem .6rem .9rem;
+}
+.code-block code {
+  font-family: var(--font-mono);
+  font-size: .7rem;
+  color: var(--g);
+  word-break: break-all;
+  line-height: 1.6;
+  display: block;
+}
+.copy-btn {
+  position: absolute;
+  top: 50%; right: .6rem;
+  transform: translateY(-50%);
+  background: rgba(83, 252, 24, .08);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--muted2);
+  cursor: pointer;
+  padding: .3rem .55rem;
+  font-size: .65rem;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  transition: all .18s;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.copy-btn:hover  { background: rgba(83, 252, 24, .15); border-color: var(--border2); color: var(--g); }
+.copy-btn.copied { color: var(--g); border-color: var(--border2); background: rgba(83, 252, 24, .12); }
+
+/* Scroll reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity .65s cubic-bezier(.4,0,.2,1),
+              transform .65s cubic-bezier(.4,0,.2,1);
+}
+.reveal.visible        { opacity: 1; transform: translateY(0); }
+.reveal-d1 { transition-delay: .1s; }
+.reveal-d2 { transition-delay: .2s; }
+.reveal-d3 { transition-delay: .3s; }
+.reveal-d4 { transition-delay: .4s; }
+.reveal-d5 { transition-delay: .5s; }
+.reveal-d6 { transition-delay: .6s; }

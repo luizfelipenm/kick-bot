@@ -1,385 +1,28 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="ZIULBOT — Bot de chat automático para lives na Kick.com. Compatível com Windows, Android e iOS.">
-<title>ZIULBOT — Kick Chat Automator</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;700&family=Space+Mono&display=swap" rel="stylesheet">
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ZIULBOT — Bot de chat automático para lives na Kick.com. Compatível com Windows, Android e iOS.">
+  <title>ZIULBOT — Kick Chat Automator</title>
 
-:root{
-  --g: #53fc18;
-  --g2: #2bbd00;
-  --bg: #080a08;
-  --s1: #0e120e;
-  --s2: #141a14;
-  --border: rgba(83,252,24,0.12);
-  --muted: #556655;
-  --text: #c8d8c8;
-  --white: #f0f7f0;
-}
+  <!-- Favicons -->
+  <link rel="icon" type="image/x-icon" href="assets/icons/favicon.ico">
+  <link rel="icon" type="image/png" sizes="512x512" href="assets/icons/icon-512.png">
+  <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
 
-html{scroll-behavior:smooth}
+  <!-- Fontes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
-body{
-  background:var(--bg);
-  color:var(--text);
-  font-family:'Inter',sans-serif;
-  overflow-x:hidden;
-  line-height:1.6;
-}
-
-/* ── NOISE TEXTURE ── */
-body::after{
-  content:'';
-  position:fixed;
-  inset:0;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-  pointer-events:none;
-  z-index:9999;
-  opacity:.4;
-}
-
-/* ── NAV ── */
-nav{
-  position:fixed;top:0;left:0;right:0;
-  z-index:100;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:1.1rem 5%;
-  background:rgba(8,10,8,.85);
-  backdrop-filter:blur(12px);
-  border-bottom:1px solid var(--border);
-}
-
-.nav-logo{
-  font-family:'Space Grotesk',sans-serif;
-  font-weight:700;font-size:1.3rem;
-  color:var(--white);
-  text-decoration:none;
-  letter-spacing:-.5px;
-  display:flex;align-items:center;gap:8px;
-}
-.nav-logo .dot{
-  width:8px;height:8px;border-radius:50%;
-  background:var(--g);
-  box-shadow:0 0 10px var(--g);
-}
-
-.nav-links{display:flex;align-items:center;gap:2rem;}
-.nav-links a{
-  color:var(--muted);text-decoration:none;font-size:.9rem;font-weight:500;
-  transition:color .2s;
-}
-.nav-links a:hover{color:var(--g);}
-
-.nav-cta{
-  display:inline-flex;align-items:center;gap:8px;
-  background:var(--g);color:#000;
-  font-weight:600;font-size:.85rem;
-  padding:.55rem 1.2rem;border-radius:8px;
-  text-decoration:none;
-  transition:all .2s;
-  box-shadow:0 0 20px rgba(83,252,24,.25);
-}
-.nav-cta:hover{background:#fff;box-shadow:0 0 30px rgba(83,252,24,.4);}
-
-@media(max-width:640px){
-  .nav-links{display:none;}
-}
-
-/* ── HERO ── */
-.hero{
-  min-height:100vh;
-  display:flex;align-items:center;
-  padding:8rem 5% 4rem;
-  position:relative;
-  overflow:hidden;
-}
-
-/* Grid de fundo */
-.hero::before{
-  content:'';
-  position:absolute;inset:0;
-  background-image:
-    linear-gradient(rgba(83,252,24,.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(83,252,24,.04) 1px, transparent 1px);
-  background-size:60px 60px;
-  mask-image:radial-gradient(ellipse 80% 60% at 50% 50%, black, transparent);
-}
-
-/* Glow central */
-.hero-glow{
-  position:absolute;
-  top:50%;left:60%;
-  transform:translate(-50%,-50%);
-  width:600px;height:600px;
-  background:radial-gradient(circle, rgba(83,252,24,.08) 0%, transparent 70%);
-  pointer-events:none;
-}
-
-.hero-content{
-  position:relative;z-index:1;
-  max-width:680px;
-}
-
-.hero-eyebrow{
-  display:inline-flex;align-items:center;gap:8px;
-  background:rgba(83,252,24,.08);
-  border:1px solid var(--border);
-  border-radius:999px;
-  padding:.35rem 1rem;
-  font-size:.75rem;font-weight:500;
-  color:var(--g);letter-spacing:.5px;
-  text-transform:uppercase;
-  margin-bottom:1.5rem;
-}
-.hero-eyebrow .pulse{
-  width:6px;height:6px;border-radius:50%;
-  background:var(--g);
-  animation:blink 1.5s infinite;
-}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
-
-.hero h1{
-  font-family:'Space Grotesk',sans-serif;
-  font-size:clamp(2.6rem,6vw,4.5rem);
-  font-weight:700;
-  line-height:1.08;
-  letter-spacing:-2px;
-  color:var(--white);
-  margin-bottom:1.5rem;
-}
-.hero h1 em{
-  font-style:normal;
-  color:var(--g);
-}
-
-.hero p{
-  font-size:1.1rem;
-  color:var(--muted);
-  max-width:500px;
-  margin-bottom:2.5rem;
-  line-height:1.7;
-}
-
-.hero-actions{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;}
-
-.btn-hero{
-  display:inline-flex;align-items:center;gap:10px;
-  background:var(--g);color:#000;
-  font-weight:700;font-size:1rem;
-  padding:.85rem 2rem;border-radius:10px;
-  text-decoration:none;
-  transition:all .2s;
-  box-shadow:0 4px 30px rgba(83,252,24,.3);
-}
-.btn-hero:hover{background:#fff;transform:translateY(-2px);box-shadow:0 8px 40px rgba(83,252,24,.4);}
-
-.btn-ghost-hero{
-  display:inline-flex;align-items:center;gap:8px;
-  color:var(--muted);font-size:.95rem;font-weight:500;
-  text-decoration:none;
-  transition:color .2s;
-}
-.btn-ghost-hero:hover{color:var(--white);}
-
-.hero-terminal{
-  margin-top:2.5rem;
-  background:var(--s1);
-  border:1px solid var(--border);
-  border-radius:12px;
-  overflow:hidden;
-  max-width:480px;
-}
-.terminal-bar{
-  background:var(--s2);
-  padding:.6rem 1rem;
-  display:flex;align-items:center;gap:6px;
-  border-bottom:1px solid var(--border);
-}
-.tbar-dot{width:10px;height:10px;border-radius:50%;}
-.terminal-body{
-  padding:1rem 1.2rem;
-  font-family:'Space Mono',monospace;
-  font-size:.78rem;
-  line-height:1.8;
-}
-.tc{color:var(--muted);}
-.tg{color:var(--g);}
-.tw{color:var(--white);}
-.ty{color:#f5a623;}
-
-/* ── STATS ROW ── */
-.stats-section{
-  padding:3rem 5%;
-  border-top:1px solid var(--border);
-  border-bottom:1px solid var(--border);
-  background:var(--s1);
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:1rem;
-}
-@media(max-width:640px){.stats-section{grid-template-columns:repeat(2,1fr);}}
-
-.stat-item{text-align:center;padding:1rem;}
-.stat-num{
-  font-family:'Space Grotesk',sans-serif;
-  font-size:2.2rem;font-weight:700;
-  color:var(--g);line-height:1;
-}
-.stat-desc{font-size:.78rem;color:var(--muted);margin-top:.4rem;text-transform:uppercase;letter-spacing:.5px;}
-
-/* ── FEATURES ── */
-.features-section{
-  padding:6rem 5%;
-}
-.section-label{
-  font-size:.72rem;color:var(--g);
-  letter-spacing:2px;text-transform:uppercase;
-  font-weight:600;margin-bottom:.8rem;
-}
-.section-title{
-  font-family:'Space Grotesk',sans-serif;
-  font-size:clamp(1.8rem,4vw,2.8rem);
-  font-weight:700;letter-spacing:-1px;
-  color:var(--white);margin-bottom:3.5rem;
-  line-height:1.15;
-}
-
-.features-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:1px;
-  background:var(--border);
-  border:1px solid var(--border);
-  border-radius:16px;
-  overflow:hidden;
-}
-@media(max-width:860px){.features-grid{grid-template-columns:1fr;}}
-@media(min-width:861px) and (max-width:1100px){.features-grid{grid-template-columns:repeat(2,1fr);}}
-
-.feature-card{
-  background:var(--s1);
-  padding:2rem;
-  transition:background .2s;
-}
-.feature-card:hover{background:var(--s2);}
-
-.feature-icon{
-  width:44px;height:44px;
-  background:rgba(83,252,24,.1);
-  border:1px solid var(--border);
-  border-radius:10px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:1.2rem;
-  margin-bottom:1.2rem;
-}
-.feature-card h3{
-  font-family:'Space Grotesk',sans-serif;
-  font-size:1rem;font-weight:600;
-  color:var(--white);margin-bottom:.5rem;
-}
-.feature-card p{font-size:.88rem;color:var(--muted);line-height:1.65;}
-
-/* ── HOW TO ── */
-.howto-section{
-  padding:6rem 5%;
-  background:var(--s1);
-  border-top:1px solid var(--border);
-  border-bottom:1px solid var(--border);
-}
-
-.steps{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:2rem;
-  margin-top:3rem;
-}
-@media(max-width:720px){.steps{grid-template-columns:1fr;}}
-
-.step{
-  display:flex;gap:1.2rem;
-}
-.step-num{
-  flex-shrink:0;
-  width:36px;height:36px;
-  border:1px solid var(--border);
-  border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Space Mono',monospace;
-  font-size:.78rem;
-  color:var(--g);
-  margin-top:.1rem;
-}
-.step-body h4{
-  font-family:'Space Grotesk',sans-serif;
-  font-size:1rem;font-weight:600;
-  color:var(--white);margin-bottom:.4rem;
-}
-.step-body p{font-size:.87rem;color:var(--muted);line-height:1.65;}
-.step-code{
-  display:inline-block;
-  margin-top:.7rem;
-  background:var(--bg);
-  border:1px solid var(--border);
-  border-radius:6px;
-  padding:.4rem .8rem;
-  font-family:'Space Mono',monospace;
-  font-size:.72rem;
-  color:var(--g);
-  word-break:break-all;
-}
-
-/* ── CTA FINAL ── */
-.cta-section{
-  padding:6rem 5%;
-  text-align:center;
-  position:relative;
-  overflow:hidden;
-}
-.cta-section::before{
-  content:'';
-  position:absolute;top:50%;left:50%;
-  transform:translate(-50%,-50%);
-  width:500px;height:500px;
-  background:radial-gradient(circle,rgba(83,252,24,.06),transparent 70%);
-  pointer-events:none;
-}
-.cta-section h2{
-  font-family:'Space Grotesk',sans-serif;
-  font-size:clamp(2rem,5vw,3.2rem);
-  font-weight:700;letter-spacing:-1.5px;
-  color:var(--white);margin-bottom:1rem;
-  position:relative;
-}
-.cta-section p{
-  color:var(--muted);font-size:1.05rem;
-  max-width:440px;margin:0 auto 2.5rem;
-  position:relative;
-}
-
-/* ── FOOTER ── */
-footer{
-  border-top:1px solid var(--border);
-  padding:2rem 5%;
-  display:flex;align-items:center;justify-content:space-between;
-  flex-wrap:wrap;gap:1rem;
-}
-.footer-logo{
-  font-family:'Space Grotesk',sans-serif;
-  font-weight:700;color:var(--muted);
-  font-size:.9rem;letter-spacing:-.5px;
-}
-footer p{font-size:.78rem;color:var(--muted);}
-footer a{color:var(--g);text-decoration:none;}
-</style>
+  <!-- Estilos -->
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/index.css">
 </head>
 <body>
 
-<nav>
+<!-- NAV -->
+<nav id="mainNav">
   <a href="#" class="nav-logo">
     <span class="dot"></span>
     ZIULBOT
@@ -387,12 +30,26 @@ footer a{color:var(--g);text-decoration:none;}
   <div class="nav-links">
     <a href="#funcionalidades">Funcionalidades</a>
     <a href="#como-usar">Como usar</a>
-    <a href="kick-bot.html" class="nav-cta">Abrir Bot →</a>
+    <a href="kick-bot.html" class="nav-cta">
+      <svg width="13" height="13" fill="currentColor" viewBox="0 0 16 16"><path d="M3 2l10 6-10 6V2z"/></svg>
+      Abrir Bot
+    </a>
   </div>
+  <button class="hamburger" id="hamburger" aria-label="Menu" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#funcionalidades" onclick="closeMenu()">Funcionalidades</a>
+  <a href="#como-usar" onclick="closeMenu()">Como usar</a>
+  <a href="kick-bot.html" class="mobile-cta">▶ Abrir Bot</a>
+</div>
 
 <!-- HERO -->
 <section class="hero">
+  <div class="hero-grid"></div>
   <div class="hero-glow"></div>
   <div class="hero-content">
     <div class="hero-eyebrow">
@@ -400,10 +57,10 @@ footer a{color:var(--g);text-decoration:none;}
       Kick.com Chat Bot
     </div>
     <h1>Seu chat,<br>no <em>piloto automático</em></h1>
-    <p>ZIULBOT comenta automaticamente em qualquer live da Kick. Configure suas mensagens, defina o intervalo e deixa rolar — funciona no navegador, sem instalar nada.</p>
+    <p>ZIULBOT comenta automaticamente em qualquer live da Kick. Configure suas mensagens, defina o intervalo e deixa rolar — sem instalar nada.</p>
     <div class="hero-actions">
-      <a href="kick-bot.html" class="btn-hero">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+      <a href="kick-bot.html" class="btn-primary-g">
+        <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M3 2l10 6-10 6V2z"/></svg>
         Iniciar agora
       </a>
       <a href="#como-usar" class="btn-ghost-hero">Como funciona →</a>
@@ -414,16 +71,10 @@ footer a{color:var(--g);text-decoration:none;}
         <div class="tbar-dot" style="background:#ff5f57"></div>
         <div class="tbar-dot" style="background:#febc2e"></div>
         <div class="tbar-dot" style="background:#28c840"></div>
-        <span style="margin-left:8px;font-family:'Space Mono',monospace;font-size:.68rem;color:#444">ziulbot ~ kick-chat</span>
+        <span class="tbar-title">ziulbot ~ kick-chat</span>
       </div>
-      <div class="terminal-body">
-        <div><span class="tc">$</span> <span class="tg">ziulbot</span> <span class="tw">--channel gaules --start</span></div>
-        <div><span class="tc">→</span> <span class="tw">Conectado ao canal</span> <span class="tg">gaules</span></div>
-        <div><span class="tc">→</span> <span class="tw">5 mensagens na fila</span></div>
-        <div><span class="ty">✦</span> <span class="tw">Enviado:</span> <span class="tc">"VAMOS VAMOS! 🔥"</span></div>
-        <div><span class="tc">→</span> <span class="tw">Próximo envio em</span> <span class="tg">28.4s</span></div>
-        <div><span class="ty">✦</span> <span class="tw">Enviado:</span> <span class="tc">"GG no chat! 👏"</span></div>
-        <div><span class="tg">▌</span></div>
+      <div class="terminal-body" id="termBody">
+        <span class="cursor"></span>
       </div>
     </div>
   </div>
@@ -431,19 +82,19 @@ footer a{color:var(--g);text-decoration:none;}
 
 <!-- STATS -->
 <div class="stats-section">
-  <div class="stat-item">
+  <div class="stat-item reveal reveal-d1">
     <div class="stat-num">100%</div>
     <div class="stat-desc">Sem instalação</div>
   </div>
-  <div class="stat-item">
+  <div class="stat-item reveal reveal-d2">
     <div class="stat-num">3</div>
     <div class="stat-desc">Plataformas</div>
   </div>
-  <div class="stat-item">
+  <div class="stat-item reveal reveal-d3">
     <div class="stat-num">∞</div>
     <div class="stat-desc">Mensagens</div>
   </div>
-  <div class="stat-item">
+  <div class="stat-item reveal reveal-d4">
     <div class="stat-num">0ms</div>
     <div class="stat-desc">Setup</div>
   </div>
@@ -451,65 +102,69 @@ footer a{color:var(--g);text-decoration:none;}
 
 <!-- FEATURES -->
 <section class="features-section" id="funcionalidades">
-  <div class="section-label">Funcionalidades</div>
-  <div class="section-title">Tudo que você precisa<br>pra dominar o chat</div>
-
+  <div class="reveal"><div class="section-label">Funcionalidades</div></div>
+  <div class="reveal reveal-d1"><div class="section-title">Tudo que você precisa<br>pra dominar o chat</div></div>
   <div class="features-grid">
-    <div class="feature-card">
+    <div class="feature-card reveal reveal-d1">
       <div class="feature-icon">💬</div>
       <h3>Fila de mensagens</h3>
       <p>Adicione quantas mensagens quiser. O bot percorre a lista e envia uma de cada vez.</p>
     </div>
-    <div class="feature-card">
+    <div class="feature-card reveal reveal-d2">
       <div class="feature-icon">🎲</div>
       <h3>Modo aleatório</h3>
-      <p>Ative o modo random para o bot misturar as mensagens e parecer mais natural no chat.</p>
+      <p>Ative o modo random para o bot misturar as mensagens e parecer mais natural.</p>
     </div>
-    <div class="feature-card">
+    <div class="feature-card reveal reveal-d3">
       <div class="feature-icon">⏱</div>
       <h3>Intervalo configurável</h3>
-      <p>Defina quantos segundos entre cada envio. Adicione variação para evitar padrões detectáveis.</p>
+      <p>Defina quantos segundos entre cada envio. Adicione variação para evitar padrões.</p>
     </div>
-    <div class="feature-card">
+    <div class="feature-card reveal reveal-d4">
       <div class="feature-icon">🧠</div>
       <h3>Simulação humana</h3>
       <p>Atraso aleatório de digitação antes de cada mensagem. Parece um humano de verdade.</p>
     </div>
-    <div class="feature-card">
+    <div class="feature-card reveal reveal-d5">
       <div class="feature-icon">📊</div>
       <h3>Log em tempo real</h3>
       <p>Acompanhe cada envio, erro e aviso no log de atividade com timestamp preciso.</p>
     </div>
-    <div class="feature-card">
+    <div class="feature-card reveal reveal-d6">
       <div class="feature-icon">🛡️</div>
       <h3>Auto-proteção</h3>
-      <p>Para automaticamente se o token expirar ou a live encerrar. Nada fica rodando à toa.</p>
+      <p>Para automaticamente se o token expirar. Nada fica rodando à toa.</p>
     </div>
   </div>
 </section>
 
 <!-- HOW TO -->
 <section class="howto-section" id="como-usar">
-  <div class="section-label">Como usar</div>
-  <div class="section-title">Pronto em 3 passos</div>
-
+  <div class="reveal"><div class="section-label">Como usar</div></div>
+  <div class="reveal reveal-d1"><div class="section-title">Pronto em 3 passos</div></div>
   <div class="steps">
-    <div class="step">
+    <div class="step reveal reveal-d1">
       <div class="step-num">01</div>
       <div class="step-body">
         <h4>Faça login no Kick</h4>
         <p>Acesse kick.com e entre na sua conta normalmente pelo navegador.</p>
       </div>
     </div>
-    <div class="step">
+    <div class="step reveal reveal-d2">
       <div class="step-num">02</div>
       <div class="step-body">
         <h4>Copie o token de sessão</h4>
-        <p>Abra o console (F12) e cole o comando abaixo para obter seu token.</p>
-        <div class="step-code">document.cookie.split('; ').find(function(c){ return c.indexOf('session_token=') === 0; }).split('=')[1]</div>
+        <p>Abra o console (F12) e execute o comando abaixo para obter seu token.</p>
+        <div class="code-block">
+          <code id="tokenCmd">document.cookie.split('; ').find(function(c){ return c.indexOf('session_token=') === 0; }).split('=')[1]</code>
+          <button class="copy-btn" onclick="copyCmd(this,'tokenCmd')" title="Copiar comando">
+            <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copiar
+          </button>
+        </div>
       </div>
     </div>
-    <div class="step">
+    <div class="step reveal reveal-d3">
       <div class="step-num">03</div>
       <div class="step-body">
         <h4>Configure e inicie</h4>
@@ -521,19 +176,27 @@ footer a{color:var(--g);text-decoration:none;}
 
 <!-- CTA -->
 <section class="cta-section">
-  <h2>Pronto pra testar?</h2>
-  <p>Abre o bot, configura em menos de 1 minuto e deixa o ZIULBOT trabalhar por você.</p>
-  <a href="kick-bot.html" class="btn-hero" style="display:inline-flex;">
-    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+  <h2 class="reveal">Pronto pra testar?</h2>
+  <p class="reveal reveal-d1">Abre o bot, configura em menos de 1 minuto e deixa o ZIULBOT trabalhar por você.</p>
+  <a href="kick-bot.html" class="btn-primary-g reveal reveal-d2" style="display:inline-flex;">
+    <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M3 2l10 6-10 6V2z"/></svg>
     Abrir o bot agora
   </a>
 </section>
 
+<!-- FOOTER -->
 <footer>
-  <span class="footer-logo">ZIULBOT</span>
-  <p>Compatível com Windows · Android · iOS &nbsp;·&nbsp; <a href="kick-bot.html">Acessar bot</a></p>
-  <p style="color:#333;font-size:.72rem;">Use com responsabilidade. Respeite os ToS da Kick.com.</p>
+  <span class="footer-logo">
+    <span class="dot"></span>
+    ZIULBOT
+  </span>
+  <p>Windows · Android · iOS &nbsp;·&nbsp; <a href="kick-bot.html">Acessar bot</a></p>
+  <p style="color:#1a2a1a;font-size:.7rem;">Respeite os ToS da Kick.com.</p>
 </footer>
+
+<!-- Scripts -->
+<script src="assets/js/utils.js"></script>
+<script src="assets/js/index.js"></script>
 
 </body>
 </html>
