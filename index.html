@@ -163,34 +163,34 @@
   <div class="reveal reveal-d1"><div class="section-title">Tudo que você precisa<br>pra dominar o chat</div></div>
   <div class="features-grid">
     <div class="feature-card reveal reveal-d1">
-      <div class="feature-icon">💬</div>
-      <h3>Fila de mensagens</h3>
-      <p>Adicione quantas mensagens quiser. O bot percorre a lista e envia uma de cada vez.</p>
+      <div class="feature-icon">🔐</div>
+      <h3>Conecte com 1 clique</h3>
+      <p>Login oficial via OAuth da Kick — sem colar token, sem console. Clique, autorize e pronto.</p>
     </div>
     <div class="feature-card reveal reveal-d2">
-      <div class="feature-icon">🎲</div>
-      <h3>Modo aleatório</h3>
-      <p>Ative o modo random para o bot misturar as mensagens e parecer mais natural.</p>
+      <div class="feature-icon">🤖</div>
+      <h3>Comentários com IA</h3>
+      <p>Modo IA lê o chat em tempo real e gera respostas contextuais com Groq, em vez de repetir mensagens fixas.</p>
     </div>
     <div class="feature-card reveal reveal-d3">
-      <div class="feature-icon">⏱</div>
-      <h3>Intervalo configurável</h3>
-      <p>Defina quantos segundos entre cada envio. Adicione variação para evitar padrões.</p>
+      <div class="feature-icon">💬</div>
+      <h3>Fila de mensagens</h3>
+      <p>Prefere controle total? Monte sua própria fila e escolha entre modo sequencial ou aleatório.</p>
     </div>
     <div class="feature-card reveal reveal-d4">
-      <div class="feature-icon">🧠</div>
-      <h3>Simulação humana</h3>
-      <p>Atraso aleatório de digitação antes de cada mensagem. Parece um humano de verdade.</p>
+      <div class="feature-icon">⏱</div>
+      <h3>Intervalo configurável</h3>
+      <p>Defina o tempo entre mensagens e adicione variação (jitter) pra evitar padrões previsíveis.</p>
     </div>
     <div class="feature-card reveal reveal-d5">
       <div class="feature-icon">📊</div>
       <h3>Log em tempo real</h3>
-      <p>Acompanhe cada envio, erro e aviso no log de atividade com timestamp preciso.</p>
+      <p>Acompanhe cada envio, erro e renovação de sessão no log de atividade, com timestamp preciso.</p>
     </div>
     <div class="feature-card reveal reveal-d6">
-      <div class="feature-icon">🛡️</div>
-      <h3>Auto-proteção</h3>
-      <p>Para automaticamente se o token expirar. Nada fica rodando à toa.</p>
+      <div class="feature-icon">🖥️</div>
+      <h3>Rodar 24/7 sem navegador</h3>
+      <p>Leve o bot pra um servidor (worker Node.js) e deixe rodando o dia inteiro, sem depender de uma aba aberta.</p>
     </div>
   </div>
 </section>
@@ -203,29 +203,22 @@
     <div class="step reveal reveal-d1">
       <div class="step-num">01</div>
       <div class="step-body">
-        <h4>Faça login no Kick</h4>
-        <p>Acesse kick.com e entre na sua conta normalmente pelo navegador.</p>
+        <h4>Abra o painel do bot</h4>
+        <p>Acesse o kick-bot.html e informe o canal onde você quer comentar.</p>
       </div>
     </div>
     <div class="step reveal reveal-d2">
       <div class="step-num">02</div>
       <div class="step-body">
-        <h4>Copie o token de sessão</h4>
-        <p>Abra o console (F12) e execute o comando abaixo para obter seu token.</p>
-        <div class="code-block">
-          <code id="tokenCmd">document.cookie.split('; ').find(function(c){ return c.indexOf('session_token=') === 0; }).split('=')[1]</code>
-          <button class="copy-btn" onclick="copyCmd(this,'tokenCmd')" title="Copiar comando">
-            <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-            Copiar
-          </button>
-        </div>
+        <h4>Conecte sua conta Kick</h4>
+        <p>Clique em "Conectar com Kick", autorize na tela oficial da Kick e pronto — sem console, sem copiar token.</p>
       </div>
     </div>
     <div class="step reveal reveal-d3">
       <div class="step-num">03</div>
       <div class="step-body">
-        <h4>Configure e inicie</h4>
-        <p>Cole o token no bot, informe o canal, adicione suas mensagens e clique em Iniciar.</p>
+        <h4>Escolha o modo e inicie</h4>
+        <p>Monte sua fila de mensagens ou ative o Modo IA (o bot lê o chat e comenta sozinho), depois clique em Iniciar.</p>
       </div>
     </div>
   </div>
