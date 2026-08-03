@@ -14,13 +14,20 @@ const WS_URL = `wss://ws-${PUSHER_CLUSTER}.pusher.com/app/${PUSHER_KEY}?protocol
 
 /**
  * Conecta ao chat em tempo real de uma sala e chama onMessage({username, content})
- * para cada mensagem recebida. Reconecta automaticamente se a conexão cair.
+ * para cada mensagem recebida. Reconecta automaticamente se a conexão cair
+ * (a menos que tenha sido fechada intencionalmente via o método close() devolvido).
+ *
+ * Devolve um controller: { close() } — chame close() para desconectar de vez
+ * (usado ao trocar de canal em tempo real).
  */
 export function connectKickChat(chatroomId, onMessage, log = console.log) {
   let ws;
   let pingInterval;
+  let closedIntentionally = false;
 
   function connect() {
+    if (closedIntentionally) return;
+
     ws = new WebSocket(WS_URL);
 
     ws.on('open', () => {
@@ -67,8 +74,9 @@ export function connectKickChat(chatroomId, onMessage, log = console.log) {
     });
 
     ws.on('close', () => {
-      log('[chat] Conexão fechada, reconectando em 5s...');
       clearInterval(pingInterval);
+      if (closedIntentionally) return; // fechado de propósito (ex: troca de canal) — não reconecta
+      log('[chat] Conexão fechada, reconectando em 5s...');
       setTimeout(connect, 5000);
     });
 
@@ -78,6 +86,16 @@ export function connectKickChat(chatroomId, onMessage, log = console.log) {
   }
 
   connect();
+
+  return {
+    close() {
+      closedIntentionally = true;
+      clearInterval(pingInterval);
+      if (ws) {
+        try { ws.close(); } catch { /* noop */ }
+      }
+    },
+  };
 }
 
 /**

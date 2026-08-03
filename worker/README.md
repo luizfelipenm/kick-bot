@@ -23,15 +23,32 @@ create table if not exists kick_bot_state (
   access_token text,
   refresh_token text not null,
   expires_at bigint not null,
+  channel text,
   updated_at timestamptz default now()
 );
 ```
+
+> Se você já criou a tabela antes (sem a coluna `channel`), rode também:
+> ```sql
+> alter table kick_bot_state add column if not exists channel text;
+> ```
 
 Depois, em **Settings → API**, copie:
 - **Project URL** → vai virar `SUPABASE_URL`
 - **service_role key** (não a `anon`!) → vai virar `SUPABASE_SERVICE_KEY`
 
 > ⚠️ A `service_role key` tem acesso total ao banco — nunca a exponha no navegador ou em código público. Ela só deve existir nas variáveis de ambiente do worker.
+
+---
+
+## 🔀 Trocar de canal sem precisar entrar na EC2
+
+O worker lê o canal ativo direto do Supabase (coluna `channel` na tabela `kick_bot_state`), não do `.env`. O `KICK_CHANNEL` no `.env` só é usado **uma vez**, na primeira execução, pra preencher essa coluna caso ela ainda esteja vazia.
+
+Pra trocar de canal depois, é só editar esse valor **direto no painel do Supabase**:
+- **Table Editor** → tabela `kick_bot_state` → clique na célula `channel` → digite o novo nome do canal → salve
+
+O worker confere essa coluna a cada 1 minuto e troca de canal sozinho — reconecta o chat, resolve os novos IDs, tudo automático. Não precisa reiniciar o processo nem entrar na EC2.
 
 ---
 

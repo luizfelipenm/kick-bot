@@ -46,3 +46,36 @@ export async function saveTokens({ access_token, refresh_token, expires_at }) {
     throw new Error(`Falha ao salvar tokens no Supabase: ${error.message}`);
   }
 }
+
+/**
+ * Lê o canal ativo (coluna "channel" da mesma tabela).
+ * Devolve null se ainda não tiver sido definido.
+ */
+export async function loadChannel() {
+  const { data, error } = await supabase
+    .from('kick_bot_state')
+    .select('channel')
+    .eq('id', 'default')
+    .single();
+
+  if (error) {
+    throw new Error(`Falha ao ler canal do Supabase: ${error.message}`);
+  }
+  return data?.channel || null;
+}
+
+/**
+ * Atualiza o canal ativo. Trocar esse valor direto no Supabase
+ * (Table Editor ou SQL) faz o worker migrar de canal automaticamente,
+ * sem precisar reiniciar nem entrar na EC2.
+ */
+export async function saveChannel(channel) {
+  const { error } = await supabase
+    .from('kick_bot_state')
+    .update({ channel, updated_at: new Date().toISOString() })
+    .eq('id', 'default');
+
+  if (error) {
+    throw new Error(`Falha ao salvar canal no Supabase: ${error.message}`);
+  }
+}
