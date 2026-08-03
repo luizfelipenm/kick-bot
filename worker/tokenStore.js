@@ -15,6 +15,14 @@
  *   );
  */
 import { createClient } from '@supabase/supabase-js';
+import WebSocket from 'ws';
+
+// Node.js 20 não tem WebSocket nativo global (só a partir do Node 22).
+// A lib do Supabase (@supabase/realtime-js) exige isso mesmo sem usarmos
+// recursos de realtime — este polyfill evita o crash na inicialização.
+if (typeof globalThis.WebSocket === 'undefined') {
+  globalThis.WebSocket = WebSocket;
+}
 
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
 
